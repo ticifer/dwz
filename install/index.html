@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shortny - Install</title>
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,400,500,700" rel="stylesheet">
+    <style>
+    a {
+        text-decoration: none;
+    }
+    body {
+        margin:0;
+        padding: 0;
+        font-family: "Fira Sans" !important;
+        background-color: #eee;
+    }
+    h1 {
+        padding: 0;
+        margin: 0;
+    }
+    .container {
+        background-color: #fff;
+        z-index: 1;
+        width: 500px;
+        max-width: 100%;
+        margin: 25px 12.5% 0;
+        padding: 24px;
+        border-left: 4px solid darkcyan;
+        box-shadow: 0 5px 30px -7px rgba(0,0,0,0.3);
+        transition: all 250ms ease;
+    }
+    #selection {
+        padding: 2em 0 2em;
+        text-align: center
+    }
+    #selection a {
+        padding: 0.5em 1.5em 0.5em;
+        margin: 0 1em 0.5em;
+        font-size: 20px;
+        border-radius: 0.5em;
+        outline: none;
+        transition: all 250ms ease;
+        background-color: darkcyan;
+        color:white;
+        opacity: 0.4;
+        cursor: pointer;
+    }
+    #selection a.active, #selection a:hover,#selection a:focus {
+        opacity: 1;
+    }
+    #selection a.upgrade {
+        background-color: #f57f17;
+    }
+    main {
+        transition: all 500ms ease-out;
+        height: auto;
+        max-height: 500px;
+        box-sizing: border-box;
+    }
+    form {
+        display:inline;
+    }
+    input[type=text],input[type=password] {
+        border: 1px solid #ccc;
+        padding: 0.5em;
+        margin-bottom: 0.5em;
+        font-size: 16px;
+        border-radius: 0.5em;
+        outline: none;
+        transition: all 250ms ease;
+    }
+    input[type=text]:focus,input[type=password]:focus {
+        border-color: lightseagreen;
+        box-shadow: 0 2px 7px -3px rgba(0,0,0,0.7);
+    }
+    input.error {
+        border-color: rgb(196, 0, 0);
+        color: rgb(196, 0, 0);
+    }
+    input.success {
+        border-color: rgb(66, 177, 14);
+    }
+    button {
+        border: 2px solid #ccc;
+        padding: 0.5em;
+        margin-bottom: 0.5em;
+        font-size: 16px;
+        border-radius: 0.5em;
+        outline: none;
+        transition: all 250ms ease;
+        background-color: rgb(10, 13, 34);
+        color:white;
+        opacity: 0.8;
+        cursor: pointer;
+    }
+    button:hover, button:focus {
+        opacity: 1;
+        box-shadow: 0 2px 7px -3px rgba(0,0,0,0.7);
+        border-color: darkcyan;
+    }
+    footer {
+        display: flex;
+        vertical-align: middle;
+        align-items: flex-end;
+        align-content: space-around;
+        flex-direction: row;
+        padding: 0 2em 0;
+        position: absolute;
+        bottom: 0;
+        z-index: -1;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    footer ul {
+        list-style: none;
+        width: 100%;
+        padding: 0;
+    }
+    footer ul li {
+        padding: 10px 0 0;
+    }
+    footer ul a {
+        text-decoration: none;
+        color: darkcyan;
+    }
+    footer ul a:hover, footer ul a:focus {
+        text-decoration: underline;
+    } 
+    footer p {
+        width: 100%;
+        text-align: right;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <h1>Shortny Installation</h1>
+        </div>
+        <main>
+            <div id="selection">
+                <a class="install" onclick="setOption(0,this)">Install</a> OR
+                <a class="upgrade" onclick="setOption(1,this)">Upgrade</a>
+            </div>
+            <form autocomplete="off" action="javascript:submitForm(this)">
+                <p id="install-notice" style="transition:all 250ms ease;overflow: hidden;height: 0;margin: 0 0 1em"></p>
+                <div><input disabled required name="" placeholder="Database Host" type="text"></div>
+                <div><input disabled required name="" placeholder="Username" type="text"></div>
+                <div><input disabled name="" placeholder="Password" type="password"></div>
+                <div><input disabled required name="" placeholder="Database Name" type="text"></div>
+                <div><button>Submit</button><span></span></div>
+            </form>
+        </main>
+    </div>
+    <footer>
+        <ul>
+            <li><a target="_blank" href="https://www.topide.com">More SCRiPTS</a></li>
+        </ul>
+        <p>&COPY; 2013-2018 Condize, All rights reserved.</p>
+    </footer>
+    <script>
+        let option = null;
+        const form = (document.forms[0]);
+        function setOption(o,w) {
+            option = o;
+            let btns = document.querySelectorAll("#selection a");
+            let notice = document.getElementById("install-notice");
+            [].slice.apply(btns).map(x=>x.classList.remove("active"));
+            w.classList.add("active");
+            [].slice.apply(form).map(x=>x.disabled=false);
+            if (option) {
+                notice.innerText = "Make sure you enter the name of your existing database."
+            } else {
+                notice.innerText = "Please create an empty database and a username and password for this script to work properly."
+            }
+            notice.style.height = "auto";
+        }
+        function submitForm() {
+            let body = {
+                req:"poop",
+                dbhost: form[0].value,
+                dbuser: form[1].value,
+                dbpass: form[2].value,
+                dbname: form[3].value,
+                option: option
+            };
+            let headers = new Headers();
+            headers.append("content-type","application/x-www-form-urlencoded");
+            console.log(JSON.stringify(body));
+            fetch("i.php",{
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(body)
+            }).then(async function poop(x){
+                switch (await x.json()) {
+                    case 2002:
+                        alert("Invalid hostname.");
+                        break;
+                    case 1045:
+                        alert("Invalid Username or Password.");
+                        break;
+                    case 1049:
+                        alert("Invalid Database name.");
+                        break;
+                    default:
+                        success(option);
+                        break;
+                }
+            });
+        }
+        function success(o) {
+            const container = document.querySelector(".container");
+            const main = container.querySelector("main");
+            main.style.opacity = 0;
+            main.style.maxHeight = 0;
+            let html;
+            if (o) {
+                html = `<h3>Successfully Uprgaded!</h3>
+                            <p>You can now delete the install folder!</p>
+                                The username and password for the admin panel has been reset to the default <strong>(admin,admin)</strong> for security reasons, <strong>Make sure to update it. </strong><br><br>
+                                #Do not hesitate to contact our 5-Star Support :)<br>
+                                #Thanks for Choosing Condize :) <3<br></p>
+                            <p><a href="../admin/settings.php">Click Here to get to your admin panel</a></p>`;
+            } else {
+                html = `<h3>Successfully installed!</h3>
+                            <p>You can now delete the install folder!</p>
+                            <p>Access your admin panel from <pre>http://{YourWebSiteURL}/admin/index.php</pre></p>
+                            <p>Default admin username and password is "admin".</p>
+                            <p>Check your admin panel and make sure you change the URL to your website URL.</p>
+                            <p>#Do not forget to read the documentation <br>
+
+                                #Do not hesitate to contact our 5-Star Support :)<br>
+
+                                #Thanks for Choosing Condize :) <3<br></p>
+                            <p><a href="../admin/settings.php">Click Here to get to your admin panel</a></p>`;
+            }
+
+            setTimeout(()=>{
+                main.innerHTML = html;
+                main.style.opacity = 1;
+                console.log(main.offsetHeight);
+                requestAnimationFrame(()=>{
+                    main.style.maxHeight = 500 + "px";
+                })
+            },600)
+            
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<html>
+<head>
+	<title>加载失败</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<style type="text/css">
+
+		*{
+			font-family: Arial;
+			color: #AAA;
+			-webkit-user-select: none;
+		}
+
+		body{
+			display: -webkit-box;
+			-webkit-box-align: center;
+			-webkit-box-pack: center;
+		}
+
+		.container{
+			text-align: center;
+		}
+
+		#icon{
+			width: 100px;
+			height: 100px;
+		}
+
+		#detail{
+			color: #CCC;
+			font-size: 0.8em;
+			padding: 10px;
+			word-break: break-all;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<img id="icon"><br/><br/>
+		<div>
+			<span id="wording">页面加载失败，请稍后再试</span><br/>
+			<span id="action">点击屏幕刷新或把手机砸了</span>
+		</div>
+		<div id="detail"></div>
+	</div>
+	<script>
+
+		var icon_loadfail = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIBAMAAABfdrOtAAAAElBMVEX///8AAAAAAAAAAAAAAAAAAABknMCaAAAABnRSTlMAESIzRFWQJKqlAAAEqklEQVR4Xu1cy3KrSgzkdfbEF+/JidnjB/vY8eyPzcz//8qthOvqOh7bDcO0F7esRaqCCC2ppQGCNMlNeclLXvKSdPGxPR6NPR63m/dSArHYGQdx9us9uhMfQADOJqo7//xA2O3v97dvxdvi93Y4so4Gke1+zL4Kz+LHua86lhuIjBfDOM6kK+fcoSTKmRidc/ZBSDLjXB+MgmscHp+yghXhGGvKGUHhGLaedRqXFBgcpQzlHBgUJZT9FTDGoBxCMCqPc8L+Poj0/TSbbB1AyHlydMtE/SfpZFpy5yY7nznXTrMqhMZqmveV65MA6dx+UmYFLRPZlAxrYNE0qcanZB6+EhlwT0O7Dr5VjyUzJycSA9uR5825BY2zMCfk0aRp1Y7AFe6I2pWGOcJdOc8/JYKZFXeWB3zPStYms8WQBaOAFeFSuU+Sv+V8kNT1StpBPaddS/182vl1MneKA7J8EK8KurlVvydeyuKFaKnjVUAzV7K79djZJJqYO/WYIlox4lXeiVYbDyS/E6/GlvFAUnN7gcLhGNJYkhBBwlMVR0VJDP+iijmTgypSUrgXixQ/WXNQEouU9kaJJpHFnXzeey+AV65l5RgtpPNJNh5udsWcqcdoIUs7hnfz16HCEi1jHrz7lwUk0XLmCwetbywQuRbiPknpwFgAEi0pb6SCZyzwqJYnrPmTPHAFcFwL+WVpcsFYoHGtn158USkswJiWpRdAfWOBxbSk9lCdvrGAYlqyiiARbhpb2DBtd6YZDGPNZ4gWpsOx+8bCVKIlSyQoumEsTGXah2tV6lryGhCkzf/K2czVAhBcFrUYOVyoRtSigHhUIxiKnMLIJ+Ta3GLkJb/sE8WyknQnrzRnLZB8XWnwS7ylHtcFYvSbFiIEkOi3X4CAoOgPEkgopFr0RyKUBkDiP9wBBA9E0R5TIb8ISMADNwFxAJn16sBB4r0EAcQRkADRg3Di/z8gJw3I8ukgnQrEW+oF0jwdpFGBnD3EqOLTsFSBnLxUiyp+aRROA3L1LFwqMFKAeK8Oov8QZiqQmrzOzRa8zoEhgRTOyzXZIozSFC5d+FW4qsAxZcGjGoW1iGoU1yJAxd8dzB/NA5E8h5uefLeRfHAqnPJugvSSJJcgvVjtmZNweUQq6FYu/Ycz/SfAScwvtuuL4mODgzXhnZSO13J8sWvl3AGd22v2WZYfBIbddLYconpY/YfX2Q9ja1Lvo3s9ctOXSWr2Q8pczKlsnaQdUEi/B+kCyYamsOr7Z2HrZMAbQNNvfNqfwkm5WJuaw+DO4MTKloMFB04Jb8RY2fZi25ex5YBnd25/Sf01acQgLSVXvVo759rLQTSjVbYmLSWkOWYIEoZa3i+KxQZe73reHAPp7LgY+naQNh+WEMc2oZJbkqqs9eqNY+Ak3nqlbyLTt8PpG/v0LYr6Zkt926i+AVbfyvv0pmR9e7W+UVzf8q5v3tePITx9oEI/GqIfctGP6+gHj/QjVM8dBtOPtekH9PSjhvqhSfn4Z0OmctWDrPqRXP1wMRfRmLR+4Fs/uq4fwtdvJ6DfGEG/xYN+swr9thv6DUT0W6HoN3XRb0/zkpe85CX/ApYQXczrNf4jAAAAAElFTkSuQmCC',
+			icon_nonetwork = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIBAMAAABfdrOtAAAAElBMVEX///8AAAAAAAAAAAAAAAAAAABknMCaAAAABnRSTlMAESIzRFWQJKqlAAAFCUlEQVR4Xu2cTVfrOAyG47jd5xa6d++t9xlK9ingPU3s//9XZi495Z2ZQPWBBs+i2nAoTp9Ir6wjTuQ0H9rNbnazm7nNr8PLS8ovL4eHXfefIDaPqcBKft6ZO/ELBHAeTN25e0Pkw8/dj9/IH5ufh/Mnf5gh2se32/5XeDZvzj0HKzcQmUUMbZxx+1LKU8f5o54xlJLDlVCmUmY1Bd/xdH3JHnehZ5AxvwNFyciBu0xpDgyaotVlAIOkaNXfg8GhPGkY9wvNCfWPKtGPsnvKQbEJJ9kVUS7+XnyJE8viSxE735bSi4IFQWSydKLls25jHUWZFTSQVpJhEcGSBmziq547dbXr2aFV9wd3XDE9Fmq075nrgh7S8lzxEE9jsfQCR/SuqByxdyXCEa0r09eXGNzmPZzVmqfqhUu5+bIlomCsWFWLjMZI5G9n0KOX+auZ8fgceNLrZW8TOl+l9KTsbph3mwHdouJ72nIiIMPvxHGJqhzbEq5EK1Bx6PHjqrZHfbSGpzNsP5PxUkfLlXBZ2WnjtSKj9Z7gkYzX+KmqlJ7vV66oDPksNxyZWzG8KzuR+dV9Eq2e0h0QSnn/Sbxi7uw8cenjFYmsW5Db02uzLCEgPCCQj5eq+FQPoe8Z/lmkMKKvkqRZA/LaaERxZbSFrD7YKZ6QBF8NHCFKvxS1XAFACahDWlnqFmdryLAUOZ1oiAekpyHbTOlOl3qJ8tDdGgLlgeU07IBwWv8yyvY7CjyKvmDPIxVoc4B0SwCdsOnVHrLOguQC5P2qBAgrvZBctAECACO9ALWHIDzYnbTBAebyk6hyQQqII6he+NUeEmdReUTmIpfFJbKMPEggertrtcoh2Swh/h8525bAC3LgNZD4WvFeRIX3XEgv2Ivo7tDb8XcjFLKGIJ+Qa0zIiI5CvOW3Mw+yHtGAcWz4OyTKIfK6EslsgQeA0RYncemCFlsuZP52CDNb/InXQCKhxEUYOz1yIfnbIcyUbC+QwEx5OQQlftBAChPiLpDu/wQpGkhGQ2ENgV0gjYHwdSEJLDnkxIV0kEa74+0h0gKJ3HUzFyIu9djqLRcSvx0SuZB4hrCXTwsiu4X0HAhkgECS7s6z8+S0SDV7SDpJ21R0ECsupIyShhvdHdovacPtSxBCFP86tFzI6hUoDiRI/52D5FvuaqgAhbidBN1HIJ9UZTj8RZIUYU3xinPnBIsXvzLDnAWzKdPCMe4QKXtQFCJgN5ob9iJ2o7lhLwJqbggPmiJzW+dlIljbMmVjtoekaVkBzA06i9Nrs5Mklyq92qGUOQiSS1Ei25QPh5QDvzwqqtfbDIYbeGsn1YOzxudzL5z6hvfgTKP8cDzD7mem7grl3UVKV1i6qx7Lejw/6ZmPZeV7fo1HgK+y/Q73guVT7LaMxKfKyQL6nuGffkaCjn7Mnd20h0sTMVJi4IkvIzkcQ89IKIdjmiHbTRakuebAEj16lbuLrPTolX6I7PJAQDNEhnE4g1KPcThlvM7zcPuZEy11vHx53m0eS6+KFuJFnzPBuRQqWvqx0cNBNzZqPwBba5TXfii50ni1/aB4pZF3++H9SscQ7A9U1D8aAlcsHNGfhqFjPVc6eGR/hKrSYTD7Y23VD+jZHzWsf2gSl0wWt2V/kLXekdz6h4sbJz4mXf/At/3R9fqH8PWvE6j/YoT6r3jQv6yi/ms39C8Qqf8qFP1LXWq9nuZmN7vZzf4EUIFS/vWqilMAAAAASUVORK5CYII=';
+
+		//parse url query
+		var query = location.search.substr(1).split('&'),
+			queryComponents = {};
+		for(var i=0; i<query.length; ++i){
+			var kv = query[i].split('=');
+			if(kv[0]) queryComponents[kv[0]] = kv[1];
+		}
+		console.log(queryComponents);
+        
+        //read value from url query and update innerText of specify DOM element
+        function updateText(componentName, elementID){
+            var value = queryComponents[componentName];
+            var el = document.getElementById(elementID || componentName);
+            if(value && el) {
+                el.innerText = decodeURIComponent(value);
+            }
+        }
+
+		//update icon
+        var iconID = parseInt(queryComponents['icon']),
+            iconEl = document.getElementById('icon');
+        switch(iconID){
+            case 1: iconEl.src = icon_nonetwork; break;
+            default: iconEl.src = icon_loadfail; break;
+        }
+    
+        //wording, action and reason
+        updateText('title', 'wording');
+        updateText('action');
+        updateText('reason', 'detail');
+
+		//listen for click to reload url
+        var refresh = parseInt(queryComponents['r']);
+        
+        var moved = false;
+		window.addEventListener('touchstart', function(){ moved = false; });
+        window.addEventListener('touchmove', function(){ moved = true; });
+        window.addEventListener('touchend', function(){
+        	if(!moved && refresh){
+                                //send request to client to reload page
+                                var iframe = document.createElement('iframe');
+                                iframe.src = 'jsbridge://ui/reloadFailLoadingURL';
+                                iframe.style.display = 'none';
+                                document.body.appendChild(iframe);
+        	}
+        });
+
+	</script>
+</body>
+</html>
